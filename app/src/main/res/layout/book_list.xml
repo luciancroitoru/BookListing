@@ -2,14 +2,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <EditText
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@color/search_view_color"
-        android:padding="16dp">
+        android:hint="@string/query_edit_text"
+        android:padding="@dimen/add_padding">
     </EditText>
+
+    <Button
+        android:id="@+id/search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/button_layout_margin"
+        android:background="@color/search_button_color"
+        android:text="@string/search_button_text" />
 
     <ListView
         android:id="@+id/list"
@@ -27,6 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:padding="@dimen/add_padding"
+        android:textAlignment="center"
         android:textAppearance="?android:textAppearanceMedium" />
 
     <!-- Loading indicator is only shown before the first load -->

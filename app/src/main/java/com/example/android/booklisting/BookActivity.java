@@ -1,5 +1,6 @@
 package com.example.android.booklisting;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -10,7 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -24,11 +27,19 @@ import android.widget.TextView;
 public class BookActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<List<Book>> {
 
+    /**
+     * URL for google books query
+     */
+    public String user_search_query =null;
+
+    // user input from EditText
+    public String searchWord;
+
     public static final String LOG_TAG = BookActivity.class.getName();
     /**
-     * URL for earthquake data from the USGS dataset
+     * URL for earthquake data from the GoogleAPI dataset
      */
-    private static final String USGS_REQUEST_URL =
+    private static final String MAIN_REQUEST_URL =
             "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=15";
     /**
      * Constant value for the book loader ID. We can choose any integer.
@@ -46,45 +57,26 @@ public class BookActivity extends AppCompatActivity
     private TextView mEmptyStateTextView;
 
     @Override
-    public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
-        Log.i(LOG_TAG, "TEST: onCreateLoader() called...");
-        // Create a new loader for the given URL
-        return new BookLoader(this, USGS_REQUEST_URL);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
-        Log.i(LOG_TAG, "TEST: onLoadFinished() called...");
-        // Clear the adapter of previous book data
-
-        // Hide loading indicator because the data has been loaded
-        View loadingIndicator = findViewById(R.id.loading_indicator);
-        loadingIndicator.setVisibility(View.GONE);
-
-        // Set empty state text to display "No books found."
-        mEmptyStateTextView.setText(R.string.no_books);
-
-        mAdapter.clear();
-
-        // If there is a valid list of {@link Book}s, then add them to the adapter's
-        // data set. This will trigger the ListView to update.
-        if (books != null && !books.isEmpty()) {
-            mAdapter.addAll(books);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Book>> loader) {
-        Log.i(LOG_TAG, "TEST: onLoadReset() called");
-        // Loader reset, so we can clear out our existing data.
-        mAdapter.clear();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(LOG_TAG, "TEST: EarthQuake Activity OnCreate() called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_list);
+
+            final EditText searchField = (EditText) findViewById(R.id.search_bar);
+            // Capture our button from layout to get the search term
+            Button button = (Button) findViewById(R.id.search_button);
+            // Register the onClick listener with the implementation above
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(LOG_TAG, "TEST: OnClickListener() called");
+                    searchWord = searchField.getText().toString();
+                    user_search_query =
+                            (MAIN_REQUEST_URL + searchWord);
+                    getLoaderManager().restartLoader(BOOK_LOADER_ID, null, BookActivity.this);
+                }
+            });
+
 
         // Find a reference to the {@link ListView} in the layout
         ListView bookListView = (ListView) findViewById(R.id.list);
@@ -143,6 +135,70 @@ public class BookActivity extends AppCompatActivity
             // Update empty state with no connection error message
             mEmptyStateTextView.setText(R.string.no_internet_connection);
         }
+    }
+
+    @Override
+    public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
+        Log.i(LOG_TAG, "TEST: onCreateLoader() called...");
+        // Create a new loader for the given URL
+        return new BookLoader(this, user_search_query);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
+        Log.i(LOG_TAG, "TEST: onLoadFinished() called...");
+        // Clear the adapter of previous book data
+
+        // Hide loading indicator because the data has been loaded
+        View loadingIndicator = findViewById(R.id.loading_indicator);
+        loadingIndicator.setVisibility(View.GONE);
+
+        // Set empty state text to display "No books found."
+        mEmptyStateTextView.setText(R.string.no_books);
+
+        mAdapter.clear();
+
+        // If there is a valid list of {@link Book}s, then add them to the adapter's
+        // data set. This will trigger the ListView to update.
+        if (books != null && !books.isEmpty()) {
+            mAdapter.addAll(books);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Book>> loader) {
+        Log.i(LOG_TAG, "TEST: onLoadReset() called");
+        // Loader reset, so we can clear out our existing data.
+        mAdapter.clear();
+    }
+
+    //hides keyboard when user enters the  BookActivity
+    public static void hideKeyboard(Activity activity) {
+        if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+        }
+    }
+
+
+    // hides keyboard when user clicks outside of EditText.
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View v = getCurrentFocus();
+
+        if (v != null &&
+                (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) &&
+                v instanceof EditText &&
+                !v.getClass().getName().startsWith("android.webkit.")) {
+            int scrcoords[] = new int[2];
+            v.getLocationOnScreen(scrcoords);
+            float x = ev.getRawX() + v.getLeft() - scrcoords[0];
+            float y = ev.getRawY() + v.getTop() - scrcoords[1];
+
+            if (x < v.getLeft() || x > v.getRight() || y < v.getTop() || y > v.getBottom())
+                hideKeyboard(this);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
 }

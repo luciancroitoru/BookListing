@@ -2,8 +2,18 @@
     <string name="app_name">BookListing</string>
 
     <!-- Text to display in the list when there are no earthquakes [CHAR LIMIT=NONE] -->
-    <string name="no_books">No books found.</string>
+    <string name="no_books">No books found. Type your query in the search field and press the SEARCH button</string>
 
     <!-- Error message when there is no internet connectivity [CHAR LIMIT=NONE] -->
     <string name="no_internet_connection">No internet connection.</string>
+    <!-- EditText text hint-->
+    <string name="query_edit_text">Write your search here</string>
+    <!-- Search button text-->
+    <string name="search_button_text">search</string>
+    <!-- book title-->
+    <string name="book_title">Book Title</string>
+    <!-- book author-->
+    <string name="book_author">Book Author</string>
+    <!-- book publisher-->
+    <string name="publisher">Publisher</string>
 </resources>

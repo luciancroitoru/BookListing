@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:padding="16dp"
+    android:padding="@dimen/add_padding"
     tools:context="com.example.android.booklisting.BookActivity">
 
     <TextView
         android:id="@+id/book_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="4dp"
-        android:text="Book Title"
+        android:paddingBottom="@dimen/add_padding_bottom"
+        android:text="@string/book_title"
         android:textAppearance="?android:textAppearanceMedium"
         android:textStyle="bold" />
 
@@ -22,8 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/book_title"
-        android:paddingBottom="4dp"
-        android:text="Book Author"
+        android:paddingBottom="@dimen/add_padding_bottom"
+        android:text="@string/book_author"
         android:textAppearance="?android:textAppearanceSmall"
         android:textStyle="bold" />
 
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/author_name"
-        android:text="Publisher"
+        android:text="@string/publisher"
         android:textAppearance="?android:textAppearanceSmall" />
 
 </RelativeLayout>
