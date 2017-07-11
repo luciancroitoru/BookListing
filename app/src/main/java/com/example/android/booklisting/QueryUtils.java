@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Helper methods related to requesting and receiving earthquake data from USGS.
+ * Helper methods related to requesting and receiving earthquake data from google api.
  */
 public final class QueryUtils {
 
@@ -61,10 +61,10 @@ public final class QueryUtils {
             // which represents a list of items (or books).
             JSONArray bookArray = baseJsonResponse.getJSONArray("items");
 
-            // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
+            // For each book in the bookArray, create an {@link Book} object
             for (int i = 0; i < bookArray.length(); i++) {
 
-                // Get a single earthquake at position i within the list of earthquakes
+                // Get a single book at position i within the list of books
                 JSONObject currentBook = bookArray.getJSONObject(i);
 
                 // For a given book, extract the JSONObject associated with the
@@ -84,7 +84,7 @@ public final class QueryUtils {
                 // Extract the value for the key called "infoLink"
                 String infoLink = properties.getString("infoLink");
 
-                // Create a new {@link Earthquake} object with the magnitude, location, time,
+                // Create a new {@link Book} object with the magnitude, location, time,
                 // and infoLink from the JSON response.
                 Book book = new Book(title, authors, publisher, infoLink);
 
@@ -185,7 +185,7 @@ public final class QueryUtils {
         Log.i(LOG_TAG, "TEST: fetchBookData() is called...");
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

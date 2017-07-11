@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">BookListing</string>
 
-    <!-- Text to display in the list when there are no earthquakes [CHAR LIMIT=NONE] -->
-    <string name="no_books">No books found. Type your query in the search field and press the SEARCH button</string>
+    <!-- Text to display in the list when there are no books [CHAR LIMIT=NONE] -->
+    <string name="no_books">No books found. Type a word that best describes your subject of interest in the search field and press the SEARCH button</string>
 
     <!-- Error message when there is no internet connectivity [CHAR LIMIT=NONE] -->
     <string name="no_internet_connection">No internet connection.</string>
     <!-- EditText text hint-->
-    <string name="query_edit_text">Write your search here</string>
+    <string name="query_edit_text">Type your word here</string>
     <!-- Search button text-->
     <string name="search_button_text">search</string>
     <!-- book title-->

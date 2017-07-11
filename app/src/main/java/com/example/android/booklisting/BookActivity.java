@@ -36,11 +36,7 @@ public class BookActivity extends AppCompatActivity
     public String searchWord;
 
     public static final String LOG_TAG = BookActivity.class.getName();
-    /**
-     * URL for earthquake data from the GoogleAPI dataset
-     */
-    private static final String MAIN_REQUEST_URL =
-            "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=15";
+
     /**
      * Constant value for the book loader ID. We can choose any integer.
      * This really only comes into play if you're using multiple loaders.
@@ -71,8 +67,9 @@ public class BookActivity extends AppCompatActivity
                 public void onClick(View v) {
                     Log.i(LOG_TAG, "TEST: OnClickListener() called");
                     searchWord = searchField.getText().toString();
+                    // URL for the search query
                     user_search_query =
-                            (MAIN_REQUEST_URL + searchWord);
+                            ("https://www.googleapis.com/books/v1/volumes?q=" + searchWord + "&maxResults=15" );
                     getLoaderManager().restartLoader(BOOK_LOADER_ID, null, BookActivity.this);
                 }
             });

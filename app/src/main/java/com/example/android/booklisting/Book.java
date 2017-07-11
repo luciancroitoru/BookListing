@@ -23,7 +23,7 @@ public class Book {
      *
      * @param vBookTitle is the book title
      * @param vAuthorName is the author name of the book
-     *  @param vPublisher is the website URL to find more details about the earthquake
+     *  @param vPublisher is the website URL to find more details about the book
      *  @param vUrl in the link to get more info about the book
      */
     public Book(String vBookTitle, String vAuthorName, String vPublisher, String vUrl)
@@ -56,7 +56,7 @@ public class Book {
     }
 
     /**
-     * Returns the website URL to find more information about the earthquake.
+     * Returns the website URL to find more information about the ebook.
      */
     public String getUrl() {
         return mUrl;

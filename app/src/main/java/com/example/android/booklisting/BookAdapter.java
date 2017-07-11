@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /*
-* {@link AndroidFlavorAdapter} is an {@link ArrayAdapter} that can provide the layout for each list
-* based on a data source, which is a list of {@link AndroidFlavor} objects.
+* {@link BookAdapter} is an {@link ArrayAdapter} that can provide the layout for each list
+* based on a data source, which is a list of {@link Book} objects.
 * */
 public class BookAdapter extends ArrayAdapter<Book> {
 
@@ -54,7 +54,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
                     R.layout.activity_main, parent, false);
         }
 
-        // Find the earthquake at the given position in the list of earthquakes
+        // Find the book at the given position in the list of books
         Book currentBook = getItem(position);
 
         String bookTitle = currentBook.getBookTitle();
