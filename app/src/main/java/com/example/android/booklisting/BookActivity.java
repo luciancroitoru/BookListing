@@ -83,8 +83,9 @@ public class BookActivity extends AppCompatActivity
 
                 // If there is no network connection, display message
                 if (networkInfo == null || !networkInfo.isConnected()) {
-                    //Display error
-                    // First, hide loading indicator so error message will be visible
+                    // Clear adapter
+                    // Then hide loading indicator so error message will be visible
+                    mAdapter.clear();
                     View loadingIndicator = findViewById(R.id.loading_indicator);
                     loadingIndicator.setVisibility(View.GONE);
 

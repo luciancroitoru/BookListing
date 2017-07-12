@@ -28,6 +28,7 @@ public final class QueryUtils {
      */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
     private static String authors;
+    private static String publisher;
 
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
@@ -64,41 +65,46 @@ public final class QueryUtils {
                 JSONArray bookArray = baseJsonResponse.getJSONArray("items");
 
 
-            // For each book in the bookArray, create an {@link Book} object
-            for (int i = 0; i < bookArray.length(); i++) {
+                // For each book in the bookArray, create an {@link Book} object
+                for (int i = 0; i < bookArray.length(); i++) {
 
-                // Get a single book at position i within the list of books
-                JSONObject currentBook = bookArray.getJSONObject(i);
+                    // Get a single book at position i within the list of books
+                    JSONObject currentBook = bookArray.getJSONObject(i);
 
-                // For a given book, extract the JSONObject associated with the
-                // key called "volumeInfo", which represents a list of all volume information
-                // for that book.
-                JSONObject properties = currentBook.getJSONObject("volumeInfo");
+                    // For a given book, extract the JSONObject associated with the
+                    // key called "volumeInfo", which represents a list of all volume information
+                    // for that book.
+                    JSONObject properties = currentBook.getJSONObject("volumeInfo");
 
-                // Extract the value for the key called "title"
-                String title = properties.getString("title");
+                    // Extract the value for the key called "title"
+                    String title = properties.getString("title");
 
-                if (properties.has("authors")) {
-                    // Extract the value for the key called "authors"
-                    authors = properties.getString("authors");
-                } else {
-                    // Authors placeholder text (e.g. "Author N/A")
-                    authors = "Author N/A";
+                    if (properties.has("authors")) {
+                        // Extract the value for the key called "authors"
+                        authors = properties.getString("authors");
+                    } else {
+                        // Authors placeholder text (e.g. "Author N/A")
+                        authors = "Author N/A";
+                    }
+
+                    if (properties.has("publisher")) {
+                        // Extract the value for the key called "publisher"
+                        publisher = properties.getString("publisher");
+                    } else {
+                        // Publisher placeholder text(e.g. "Publisher N/A")
+                        publisher = "Publisher N/A";
+                    }
+
+                    // Extract the value for the key called "infoLink"
+                    String infoLink = properties.getString("infoLink");
+
+                    // Create a new {@link Book} object with the title, authors, publisher
+                    // and infoLink from the JSON response.
+                    Book book = new Book(title, authors, publisher, infoLink);
+
+                    // Add the new {@link Book} to the list of books.
+                    books.add(book);
                 }
-
-                // Extract the value for the key called "publisher"
-                String publisher = properties.getString("publisher");
-
-                // Extract the value for the key called "infoLink"
-                String infoLink = properties.getString("infoLink");
-
-                // Create a new {@link Book} object with the title, authors, publisher
-                // and infoLink from the JSON response.
-                Book book = new Book(title, authors, publisher, infoLink);
-
-                // Add the new {@link Book} to the list of books.
-                books.add(book);
-            }
             }
 
         } catch (JSONException e) {
