@@ -27,21 +27,18 @@ import android.widget.TextView;
 public class BookActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<List<Book>> {
 
-    /**
-     * URL for google books query
-     */
-    public String user_search_query =null;
-
-    // user input from EditText
-    public String searchWord;
-
     public static final String LOG_TAG = BookActivity.class.getName();
-
     /**
      * Constant value for the book loader ID. We can choose any integer.
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int BOOK_LOADER_ID = 1;
+    /**
+     * URL for google books query
+     */
+    public String user_search_query = null;
+    // user input from EditText
+    public String searchWord;
     /**
      * Adapter for the list of books
      */
@@ -52,27 +49,59 @@ public class BookActivity extends AppCompatActivity
      */
     private TextView mEmptyStateTextView;
 
+    //hides keyboard when user enters the  BookActivity
+    public static void hideKeyboard(Activity activity) {
+        if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(LOG_TAG, "TEST: EarthQuake Activity OnCreate() called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_list);
 
-            final EditText searchField = (EditText) findViewById(R.id.search_bar);
-            // Capture our button from layout to get the search term
-            Button button = (Button) findViewById(R.id.search_button);
-            // Register the onClick listener with the implementation above
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i(LOG_TAG, "TEST: OnClickListener() called");
+        final EditText searchField = (EditText) findViewById(R.id.search_bar);
+        // Capture our button from layout to get the search term
+        Button button = (Button) findViewById(R.id.search_button);
+        // Register the onClick listener with the implementation above
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.i(LOG_TAG, "TEST: OnClickListener() called");
+
+
+                // Get a reference to the ConnectivityManager to check state of network connectivity
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                // Get details on the currently active default data network
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+                // If there is no network connection, display message
+                if (networkInfo == null || !networkInfo.isConnected()) {
+                    //Display error
+                    // First, hide loading indicator so error message will be visible
+                    View loadingIndicator = findViewById(R.id.loading_indicator);
+                    loadingIndicator.setVisibility(View.GONE);
+
+                    // Update empty state with no connection error message
+                    mEmptyStateTextView.setText(R.string.no_internet_connection);
+                } else {
+                    //get the user search input
+                    //erase all space characters
                     searchWord = searchField.getText().toString();
+                    searchWord = searchWord.replaceAll(" ", "");
                     // URL for the search query
                     user_search_query =
-                            ("https://www.googleapis.com/books/v1/volumes?q=" + searchWord + "&maxResults=15" );
+                            ("https://www.googleapis.com/books/v1/volumes?q=" + searchWord + "&maxResults=15");
                     getLoaderManager().restartLoader(BOOK_LOADER_ID, null, BookActivity.this);
                 }
-            });
+            }
+        });
 
 
         // Find a reference to the {@link ListView} in the layout
@@ -145,7 +174,6 @@ public class BookActivity extends AppCompatActivity
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
         Log.i(LOG_TAG, "TEST: onLoadFinished() called...");
         // Clear the adapter of previous book data
-
         // Hide loading indicator because the data has been loaded
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
@@ -168,15 +196,6 @@ public class BookActivity extends AppCompatActivity
         // Loader reset, so we can clear out our existing data.
         mAdapter.clear();
     }
-
-    //hides keyboard when user enters the  BookActivity
-    public static void hideKeyboard(Activity activity) {
-        if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
-        }
-    }
-
 
     // hides keyboard when user clicks outside of EditText.
     @Override

@@ -27,6 +27,7 @@ public final class QueryUtils {
      * Tag for the log messages
      */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
+    private static String authors;
 
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
@@ -75,8 +76,13 @@ public final class QueryUtils {
                 // Extract the value for the key called "title"
                 String title = properties.getString("title");
 
-                // Extract the value for the key called "authors"
-                String authors = properties.getString("authors");
+                if (properties.has("authors")) {
+                    // Extract the value for the key called "authors"
+                    authors = properties.getString("authors");
+                } else {
+                    // Authors placeholder text (e.g. "Author N/A")
+                    authors = "Author N/A";
+                }
 
                 // Extract the value for the key called "publisher"
                 String publisher = properties.getString("publisher");
@@ -84,11 +90,11 @@ public final class QueryUtils {
                 // Extract the value for the key called "infoLink"
                 String infoLink = properties.getString("infoLink");
 
-                // Create a new {@link Book} object with the magnitude, location, time,
+                // Create a new {@link Book} object with the title, authors, publisher
                 // and infoLink from the JSON response.
                 Book book = new Book(title, authors, publisher, infoLink);
 
-                // Add the new {@link Book} to the list of earthquakes.
+                // Add the new {@link Book} to the list of books.
                 books.add(book);
             }
 
