@@ -58,9 +58,11 @@ public final class QueryUtils {
             // Create a JSONObject from the JSON response string
             JSONObject baseJsonResponse = new JSONObject(bookJSON);
 
-            // Extract the JSONArray associated with the key called "items",
-            // which represents a list of items (or books).
-            JSONArray bookArray = baseJsonResponse.getJSONArray("items");
+            if (baseJsonResponse.has("items")) {
+                // Extract the JSONArray associated with the key called "items",
+                // which represents a list of books.
+                JSONArray bookArray = baseJsonResponse.getJSONArray("items");
+
 
             // For each book in the bookArray, create an {@link Book} object
             for (int i = 0; i < bookArray.length(); i++) {
@@ -96,6 +98,7 @@ public final class QueryUtils {
 
                 // Add the new {@link Book} to the list of books.
                 books.add(book);
+            }
             }
 
         } catch (JSONException e) {
